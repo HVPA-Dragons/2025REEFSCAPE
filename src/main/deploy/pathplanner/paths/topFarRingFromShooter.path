@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.4039824113642565,
+        "y": 5.552321586229575
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.7393670362732268,
+        "y": 5.857937864788019
+      },
+      "isLocked": false,
+      "linkedName": "Shoot1"
+    },
+    {
+      "anchor": {
+        "x": 8.206303098158605,
+        "y": 7.203483188836067
+      },
+      "prevControl": {
+        "x": 2.619097816099315,
+        "y": 5.825577203562339
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "TopFarRing"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -118.30075576600619,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": -179.7933393897215,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
