@@ -1,5 +1,5 @@
 {
-  "version": 1.0,
+  "version": "2025.0",
   "waypoints": [
     {
       "anchor": {
@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.122284470984033,
-        "y": 7.042763142130057
+        "x": 13.881155802190177,
+        "y": 6.999642420729382
       },
       "isLocked": false,
       "linkedName": "TopRedRing"
@@ -20,8 +20,8 @@
         "y": 6.670053340106681
       },
       "prevControl": {
-        "x": 14.136805632101828,
-        "y": 7.028241981012265
+        "x": 14.247796205445747,
+        "y": 7.0755162571249555
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,23 +30,25 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
+  "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60.199056314380734,
-    "rotateFast": false
+    "rotation": -60.199056314380734
   },
   "reversed": false,
   "folder": null,
-  "previewStartingState": {
-    "rotation": 0,
-    "velocity": 0
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
