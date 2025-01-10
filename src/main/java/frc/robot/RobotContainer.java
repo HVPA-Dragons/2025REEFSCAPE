@@ -10,7 +10,6 @@ import frc.robot.commands.ShootBackCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.IRRead;
 
-import frc.robot.commands.SwerveDrive.FieldRelativeAbsoluteAngleDrive;
 import frc.robot.commands.SwerveDrive.FieldRelativeRotationRateDrive;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -93,7 +92,7 @@ public class RobotContainer {
             return new Translation2d(leftY.getAsDouble(), leftX.getAsDouble());
         };
 
-        Command absoluteAngle = new FieldRelativeAbsoluteAngleDrive(drive, translation, angle);
+       
 
         // Command absoluteAngleTriangle = new FieldRelativeAbsoluteAngleDrive(drive,
         // translation,

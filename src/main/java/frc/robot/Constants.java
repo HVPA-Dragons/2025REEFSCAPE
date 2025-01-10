@@ -8,8 +8,11 @@ public final class Constants {
         public static final String kDriveSensitivity = "Drive sensitivity";
         public static final String kTurnSensitivity = "Turn sensitivity";
     }
-
+        // Swerve constants
     public static class SwerveDriveConstants {
+        public static final double kMaxLinearVelocity = 3;
+        public static final double kMaxAngularVelocity = Math.PI;
+        
     }
 
     public static class IntakeConstants {

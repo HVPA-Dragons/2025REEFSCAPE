@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkLowLevel;
+import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.math.controller.*;
 
 public class ShooterClimberSubsystem extends SubsystemBase {
-    private final CANSparkMax shooterMotor1;
-    private final CANSparkMax shooterMotor2;
+    private final SparkMax shooterMotor1;
+    private final SparkMax shooterMotor2;
 
     public ShooterClimberSubsystem() {
         shooterMotor1 = new CANSparkMax(Constants.ShooterConstants.kShooterMotor1Port, MotorType.kBrushless);
