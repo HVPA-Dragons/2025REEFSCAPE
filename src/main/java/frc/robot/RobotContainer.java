@@ -6,14 +6,11 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.ShootBackCommand;
-import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.IRRead;
 
 import frc.robot.commands.SwerveDrive.FieldRelativeRotationRateDrive;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.ShooterClimberSubsystem;
 import frc.robot.subsystems.SensorSuiteSubsystem;
 import frc.robot.utils.DoubleTransformer;
 import frc.robot.utils.SendableChooserCommand;
@@ -36,7 +33,6 @@ public class RobotContainer {
     // The robot's subsystems are defined here...
     private Optional<SwerveSubsystem> m_swerveDrive = Optional.empty();
     private Optional<IntakeSubsystem> m_intake = Optional.empty();
-    private Optional<ShooterClimberSubsystem> m_shooterClimber = Optional.empty();
     private Optional<SensorSuiteSubsystem> m_sensorSuite = Optional.empty();
 
     private final CommandXboxController m_driverController = new CommandXboxController(0);
@@ -51,7 +47,6 @@ public class RobotContainer {
         setupIntake();
         setupShooterClimber();
         setupSensorSuite();
-        NamedCommands.registerCommand("ShootOnSpeaker", new ShooterCommand(m_shooterClimber.get()));
         NamedCommands.registerCommand("Intake", new IntakeCommand(m_intake.get()));
 
     }
@@ -94,23 +89,7 @@ public class RobotContainer {
 
        
 
-        // Command absoluteAngleTriangle = new FieldRelativeAbsoluteAngleDrive(drive,
-        // translation,
-        // Rotation2d.fromDegrees(0));
-        // Command absoluteAngleCircle = new FieldRelativeAbsoluteAngleDrive(drive,
-        // translation,
-        // Rotation2d.fromDegrees(90));
-        // Command absoluteAngleSquare = new FieldRelativeAbsoluteAngleDrive(drive,
-        // translation,
-        // Rotation2d.fromDegrees(180));
-        // Command absoluteAngleCross = new FieldRelativeAbsoluteAngleDrive(drive,
-        // translation,
-        // Rotation2d.fromDegrees(270));
-
-        // m_driverController.triangle().whileTrue(absoluteAngleTriangle);
-        // m_driverController.circle().whileTrue(absoluteAngleCircle);
-        // m_driverController.square().whileTrue(absoluteAngleSquare);
-        // m_driverController.cross().whileTrue(absoluteAngleCross);
+       
 
         // Relative Drive commands
         Command rotationRate = new FieldRelativeRotationRateDrive(drive, translation, rightX);
@@ -118,7 +97,7 @@ public class RobotContainer {
         // Reset gyro
         m_driverController.rightStick().onTrue(drive.cZeroGyro());
 
-        drive.setDefaultCommand(new SendableChooserCommand("Swerve Drive Command", rotationRate, absoluteAngle));
+        drive.setDefaultCommand(new SendableChooserCommand("Swerve Drive Command", rotationRate));
         m_swerveDrive = Optional.of(drive);
     }
 
@@ -133,19 +112,7 @@ public class RobotContainer {
         m_driverController.rightTrigger().whileTrue(IntakeCommand);
     }
 
-    private void setupShooterClimber() {
-        var shooterClimber = new ShooterClimberSubsystem();
-
-        m_shooterClimber = Optional.of(shooterClimber);
-
-        Command ShooterCommand = new ShooterCommand(shooterClimber);
-        Command ShootBackCommand = new ShootBackCommand(shooterClimber, m_intake.get());
-
-        m_driverController.leftTrigger().whileTrue(ShooterCommand);
-
-        m_driverController.leftBumper().whileTrue(ShootBackCommand);
-
-    }
+   
 
     private void setupSensorSuite() {
         var sensorSuite = new SensorSuiteSubsystem();
