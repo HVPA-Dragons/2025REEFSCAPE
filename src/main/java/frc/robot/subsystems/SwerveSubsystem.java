@@ -7,20 +7,25 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import com.ctre.phoenix6.hardware.Pigeon2;
-import com.ctre.phoenix6.swerve.SwerveModule;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.LinearVelocity;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
+
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.util.struct.parser.*;
+
+/* TODO: Implement interaction w/ swerve modules, gyro, and path planner*/
+ 
 
 
 
 public class SwerveSubsystem extends SubsystemBase {
-    public static final double kMaxLinearVelocity = frc.robot.Constants.SwerveDriveConstants.kMaxLinearVelocity;
-    public static final double kMaxAngularVelocity = frc.robot.Constants.SwerveDriveConstants.kMaxAngularVelocity;
+    public static final LinearVelocity kMaxLinearVelocity = frc.robot.Constants.SwerveDriveConstants.kMaxLinearVelocity;
+    public static final AngularVelocity kMaxAngularVelocity = frc.robot.Constants.SwerveDriveConstants.kMaxAngularVelocity;
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
             // TODO Get wheel locations
@@ -38,9 +43,34 @@ public class SwerveSubsystem extends SubsystemBase {
         
     }
 
-    public void drive(double fwd, double str, double rot, Rotation2d heading) {
-        ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(fwd, str, rot, heading);
+    public void drive(LinearVelocity vx, LinearVelocity vy, AngularVelocity omega, Rotation2d heading) {
+        ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds (vx, vy, omega, heading);
         var states = kinematics.toSwerveModuleStates(speeds);
-        // Further module control logic goes here
+        
     }
-}
+
+    public LinearVelocity getMaximumVelocity() {
+        return kMaxLinearVelocity;
+    }
+
+    public  AngularVelocity getMaximumAngularVelocity() {
+        return kMaxAngularVelocity;
+    }
+
+    public void ZeroGyro() {
+        // Implementation for ZeroGyro
+    }
+
+    public Command cZeroGyro() {
+        return this.runOnce(this::ZeroGyro);}
+
+    public Rotation2d getHeading() {
+        // Implementation for getHeading
+        return null;
+    }
+
+    public void stop() {
+        // Implementation for stop
+        
+    }
+    }

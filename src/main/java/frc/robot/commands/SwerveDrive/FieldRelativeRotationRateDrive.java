@@ -3,7 +3,6 @@ package frc.robot.commands.SwerveDrive;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -58,15 +57,19 @@ public class FieldRelativeRotationRateDrive extends Command {
         Translation2d translation = translationSupplier.get();
         
         // Apply sensitivity scaling and convert to appropriate units for velocity
-        MetersPerSecond vx = MAX_SPEED.times(translation.getX() * driveSensitivity);
-        MetersPerSecond vy = MAX_SPEED.times(translation.getY() * driveSensitivity);
-        RadiansPerSecond omega = MAX_OMEGA.times(omegaSupplier.getAsDouble() * turnSensitivity);
+        LinearVelocity vx = MAX_SPEED.times(translation.getX() * driveSensitivity);
+        LinearVelocity vy = MAX_SPEED.times(translation.getY() * driveSensitivity);
+        AngularVelocity omega = MAX_OMEGA.times(omegaSupplier.getAsDouble() * turnSensitivity);
 
-        // Create the ChassisSpeeds object to drive the robot
-        ChassisSpeeds speeds = new ChassisSpeeds(vx, vy, omega);
+    
 
-        // Drive the robot using the calculated speeds
-        drive.drive(speeds);
+        // Drive the robot using the calculated speeds 
+        drive.drive(
+            vx,
+            vy,
+            omega,
+            drive.getHeading()
+        );
     }
 
     @Override

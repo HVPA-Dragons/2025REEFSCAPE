@@ -1,5 +1,13 @@
 package frc.robot;
 
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.LinearVelocity;
+
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+
+
+
 public final class Constants {
     public static class OperatorConstants {
         public static final int kDriverControllerPort = 0;
@@ -10,8 +18,8 @@ public final class Constants {
     }
         // Swerve constants
     public static class SwerveDriveConstants {
-        public static final double kMaxLinearVelocity = 3;
-        public static final double kMaxAngularVelocity = Math.PI;
+        public static final LinearVelocity kMaxLinearVelocity = MetersPerSecond.of(3.0); 
+        public static final AngularVelocity kMaxAngularVelocity = RadiansPerSecond.of(Math.PI);
         
     }
 
