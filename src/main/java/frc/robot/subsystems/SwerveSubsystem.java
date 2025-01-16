@@ -4,22 +4,20 @@ import java.io.File;
 import java.io.IOException;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.measure.Units;
-import edu.wpi.first.units.measure.Velocity;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.AngularVelocity;
 import swervelib.SwerveDrive;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
@@ -28,6 +26,8 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 import static edu.wpi.first.math.util.Units.feetToMeters;
 import static edu.wpi.first.math.util.Units.inchesToMeters;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 
 public class SwerveSubsystem extends SubsystemBase {
     private final SwerveDrive m_swerveDrive;
@@ -53,24 +53,44 @@ public class SwerveSubsystem extends SubsystemBase {
         double driveMotorConversion = SwerveMath.calculateMetersPerRotation(inchesToMeters(4), 6.12);
         m_swerveDrive = parser.createSwerveDrive(maxSpeed, angleMotorConversionFactor, driveMotorConversion);
 
-        AutoBuilder.configureHolonomic(
-                this::getPose,
-                this::resetPose,
-                this::getVelocity,
-                this::driveRobotRelative,
-                new HolonomicPathFollowerConfig(
-                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-                        4.5,
-                        m_swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
-                        new ReplanningConfig()),
-                () -> {
-                    var alliance = DriverStation.getAlliance();
-                    return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
-                },
-                this);
+        
+        
+        
+        RobotConfig config;
+    try {
+        config = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+        // Handle exception as needed
+        e.printStackTrace();
+        return;}
 
-    }
+    // Configure AutoBuilder last
+    AutoBuilder.configure(
+            this::getPose, // Robot pose supplier
+            this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+            new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+            ),
+            config, // The robot configuration
+            () -> {
+              // Boolean supplier that controls when the path will be mirrored for the red alliance
+              // This will flip the path being followed to the red side of the field.
+              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
+              return false;
+            },
+            this // Reference to this subsystem to set requirements
+    );
+  }
+
+    
 
     @Override
     public void periodic() {
@@ -82,7 +102,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * @reture A measure of the maximum velocity of the swerve drive.
      */
     public LinearVelocity getMaximumVelocity() {
-        return Units.MetersPerSecond.of(m_swerveDrive.getMaximumVelocity());
+        return MetersPerSecond.of(m_swerveDrive.getMaximumChassisVelocity());
     }
 
     /**
@@ -91,7 +111,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * @return A measure of the maximum angular velocity of the swerve drive.
      */
     public AngularVelocity getMaximumAngularVelocity() {
-        return Units.RadiansPerSecond.of(m_swerveDrive.getMaximumAngularVelocity());
+        return DegreesPerSecond.of(m_swerveDrive.getMaximumChassisAngularVelocity() * (Math.PI / 180)); // Convert to Radians/s
     }
 
     /**
