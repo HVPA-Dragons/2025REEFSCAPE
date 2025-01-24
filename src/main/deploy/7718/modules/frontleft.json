@@ -5,11 +5,11 @@
     },
     "absoluteEncoderOffset": -66.8,
     "drive": {
-        "type": "sparkmax",
+        "type": "krakenx60",
         "id": 1
     },
     "angle": {
-        "type": "sparkmax",
+        "type": "krakenx60",
         "id": 2
     },
     "encoder": {
