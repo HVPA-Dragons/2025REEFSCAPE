@@ -33,11 +33,8 @@ public class RobotContainer {
     private Optional<SensorSuiteSubsystem> m_sensorSuite = Optional.empty();
 
     private final CommandXboxController m_driverController = new CommandXboxController(0);
-    private final CommandXboxController m_operatorController = new CommandXboxController(1); /*
-                                                                                              * not sure if this will be
-                                                                                              * needed
-                                                                                              */
-
+    private final CommandXboxController m_operatorController = new CommandXboxController(1);
+        // unsure if two controllers are necessary.
     public RobotContainer() {
 
         setupSwerveDrive();
